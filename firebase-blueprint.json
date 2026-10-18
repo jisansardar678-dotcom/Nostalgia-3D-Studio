@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "UserDraft": {
+      "title": "User Draft Configuration",
+      "description": "Cross-device persistent 3D configuration draft for user sessions",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner user ID or device session token",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "description": "3D Art Title",
+          "maxLength": 100
+        },
+        "heading": {
+          "type": "string",
+          "description": "Wish Heading / Greeting text",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "description": "Subtitle note or heartfelt message",
+          "maxLength": 500
+        },
+        "responseButtonText": {
+          "type": "string",
+          "description": "Bottom interactive response button label",
+          "maxLength": 100
+        },
+        "layout": {
+          "type": "string",
+          "description": "3D Layout Cluster mode (heart, helix, globe, saturn, cloud)",
+          "enum": ["heart", "helix", "globe", "saturn", "cloud"]
+        },
+        "colorMode": {
+          "type": "string",
+          "description": "Color combination mode",
+          "enum": ["multi_auto", "rose_gold", "cyber_neon", "golden_star", "aurora_violet"]
+        },
+        "words": {
+          "type": "array",
+          "description": "List of floating 3D word items"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last draft modification"
+        }
+      },
+      "required": ["userId", "heading", "description", "responseButtonText", "layout", "colorMode", "words"]
+    },
+    "SharedWish": {
+      "title": "Shared 3D Wish",
+      "description": "Publicly viewable 3D Word Art card created by users",
+      "type": "object",
+      "properties": {
+        "creatorId": {
+          "type": "string",
+          "description": "Creator user ID or session ID",
+          "maxLength": 128
+        },
+        "heading": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "responseButtonText": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["heart", "helix", "globe", "saturn", "cloud"]
+        },
+        "colorMode": {
+          "type": "string",
+          "enum": ["multi_auto", "rose_gold", "cyber_neon", "golden_star", "aurora_violet"]
+        },
+        "words": {
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["heading", "description", "responseButtonText", "layout", "colorMode", "words"]
+    }
+  },
+  "firestore": {
+    "/user_drafts/{draftId}": {
+      "schema": "UserDraft",
+      "description": "User 3D configuration drafts stored per session/user"
+    },
+    "/shared_wishes/{wishId}": {
+      "schema": "SharedWish",
+      "description": "Shared 3D Wish cards created by users"
+    }
+  }
+}

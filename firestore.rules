@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidDraft(data) {
+      return data.keys().hasAll(['userId', 'heading', 'description', 'responseButtonText', 'layout', 'colorMode', 'words']) &&
+        data.userId is string && data.userId.size() <= 128 &&
+        data.heading is string && data.heading.size() <= 200 &&
+        data.description is string && data.description.size() <= 500 &&
+        data.responseButtonText is string && data.responseButtonText.size() <= 100 &&
+        data.layout in ['heart', 'helix', 'globe', 'saturn', 'cloud'] &&
+        data.colorMode in ['multi_auto', 'rose_gold', 'cyber_neon', 'golden_star', 'aurora_violet'] &&
+        data.words is list && data.words.size() <= 50;
+    }
+
+    function isValidWish(data) {
+      return data.keys().hasAll(['heading', 'description', 'responseButtonText', 'layout', 'colorMode', 'words']) &&
+        data.heading is string && data.heading.size() <= 200 &&
+        data.description is string && data.description.size() <= 500 &&
+        data.responseButtonText is string && data.responseButtonText.size() <= 100 &&
+        data.layout in ['heart', 'helix', 'globe', 'saturn', 'cloud'] &&
+        data.colorMode in ['multi_auto', 'rose_gold', 'cyber_neon', 'golden_star', 'aurora_violet'] &&
+        data.words is list && data.words.size() <= 50;
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User Drafts Collection
+    match /user_drafts/{draftId} {
+      allow get, list: if true;
+      allow create, update: if isValidDraft(incoming());
+      allow delete: if true;
+    }
+
+    // Shared Wishes Collection
+    match /shared_wishes/{wishId} {
+      allow get, list: if true;
+      allow create: if isValidWish(incoming());
+      allow update, delete: if true;
+    }
+  }
+}

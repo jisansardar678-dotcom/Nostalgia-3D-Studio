@@ -1,0 +1,6 @@
+{
+  "name": "Nostalgia 3D Studio App",
+  "description": "Interactive 3D particle studio with customizable 3D shapes, glowing 3D text, color presets, and messenger gift cards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
